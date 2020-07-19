@@ -1,11 +1,20 @@
 package com.micro.zuul.configuration;
 
+import com.micro.zuul.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
 public class UserAuthentication implements Authentication {
+
+    private User user;
+
+    public UserAuthentication(){}
+    public UserAuthentication(User user){
+        this.user = user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -13,17 +22,17 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return "dsaf";
+        return user.getPassword();
     }
 
     @Override
     public Object getDetails() {
-        return "1";
+        return user;
     }
 
     @Override
     public Object getPrincipal() {
-        return "1";
+        return user;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public String toString() {
-        return null;
+        return user.toString();
     }
 
     @Override
@@ -53,6 +62,6 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return "1";
+        return user.getEmail();
     }
 }

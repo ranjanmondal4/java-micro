@@ -1,6 +1,8 @@
 package com.micro.zuul.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +15,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // userRepo
+    @Autowired
+    MongoTemplate mongoTemplate;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -22,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest()
                 .authenticated();
 
-        http.addFilterBefore(new AuthenticationFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new AuthenticationFilter(mongoTemplate), BasicAuthenticationFilter.class);
     }
 
     @Override
@@ -31,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/configuration/security", "/swagger-ui.html", "/webjars/**", "/static/**");
 
         web.ignoring().antMatchers("/user/api/v1/user/login");
+        web.ignoring().antMatchers("/user/api/v1/user/register");
 
         web.ignoring().antMatchers("/*/")
                 .antMatchers("/eureka/**")
