@@ -1,28 +1,35 @@
 package com.micro.zuul.configuration;
 
+import com.micro.zuul.domain.RedisUserRole;
 import com.micro.zuul.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class UserAuthentication implements Authentication {
 
-    private User user;
+    private static final long serialVersionUID = -8524087869422730778L;
+
+    private RedisUserRole user;
 
     public UserAuthentication(){}
-    public UserAuthentication(User user){
+    public UserAuthentication(RedisUserRole user){
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
+//        return null;
     }
 
     @Override
     public Object getCredentials() {
-        return user.getPassword();
+        return user.getToken();
     }
 
     @Override
@@ -62,6 +69,6 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return user.getEmail();
+        return user.getUserId();
     }
 }

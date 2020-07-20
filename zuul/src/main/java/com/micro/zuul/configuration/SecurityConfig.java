@@ -1,5 +1,6 @@
 package com.micro.zuul.configuration;
 
+import com.micro.zuul.repo.RedisUserRoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -18,6 +19,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     MongoTemplate mongoTemplate;
 
+    @Autowired
+    RedisUserRoleRepo redisUserRoleRepo;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -26,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest()
                 .authenticated();
 
-        http.addFilterBefore(new AuthenticationFilter(mongoTemplate), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new AuthenticationFilter(mongoTemplate, redisUserRoleRepo), BasicAuthenticationFilter.class);
     }
 
     @Override
@@ -34,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
                 "/configuration/security", "/swagger-ui.html", "/webjars/**", "/static/**");
 
-        web.ignoring().antMatchers("/user/api/v1/user/login");
-        web.ignoring().antMatchers("/user/api/v1/user/register");
+        web.ignoring().antMatchers("/user/login");
+        web.ignoring().antMatchers("/user/register");
 
         web.ignoring().antMatchers("/*/")
                 .antMatchers("/eureka/**")

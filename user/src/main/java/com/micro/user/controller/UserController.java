@@ -37,11 +37,10 @@ public class UserController {
 
 
 
-    @RequestMapping("/login")
-    public String login(@RequestBody LoginDto loginDto){ // http://localhost:8087/api/v1/user/1/cabinet
+    @PostMapping("/login")
+    public User login(@RequestBody LoginDto loginDto){ // http://localhost:8087/api/v1/user/1/cabinet
         return userService.login(loginDto);
     }
-
 
 }
 
