@@ -26,4 +26,20 @@ public class RedisUserRole implements Serializable {
         userRole.roles = Arrays.asList("ROLE_USER", "ROLE_USER_VIEW");
         return userRole;
     }
+
+    public static RedisUserRole of(String userId, String token, List<String> roles){
+        RedisUserRole userRole = new RedisUserRole();
+        userRole.userId = userId;
+        userRole.token = token;
+        userRole.roles = roles;
+        return userRole;
+    }
+
+    @Override
+    public String toString() {
+        return "{ userId='" + userId + '\'' +
+                ", token='" + token + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }

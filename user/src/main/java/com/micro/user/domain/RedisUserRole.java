@@ -13,9 +13,9 @@ import java.util.List;
 //@RedisHash
 public class RedisUserRole implements Serializable {
     private static final long serialVersionUID = -2601175617857390837L;
-    @Id
+//    @Id
     private String userId;
-    @Indexed
+//    @Indexed
     private String token;
     private List<String> roles;
 
@@ -24,6 +24,14 @@ public class RedisUserRole implements Serializable {
         userRole.userId = user.getId();
         userRole.token = user.getToken();
         userRole.roles = Arrays.asList("ROLE_USER", "ROLE_USER_VIEW");
+        return userRole;
+    }
+
+    public static RedisUserRole of(String userId, String token, List<String> roles){
+        RedisUserRole userRole = new RedisUserRole();
+        userRole.userId = userId;
+        userRole.token = token;
+        userRole.roles = roles;
         return userRole;
     }
 }

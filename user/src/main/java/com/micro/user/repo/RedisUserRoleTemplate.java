@@ -1,6 +1,6 @@
-package com.micro.zuul.repo;
+package com.micro.user.repo;
 
-import com.micro.zuul.domain.RedisUserRole;
+import com.micro.user.domain.RedisUserRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -8,16 +8,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @Repository
 public class RedisUserRoleTemplate {
+
     @Autowired
-    RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
 
     private HashOperations hashOperations;
 
@@ -30,14 +28,14 @@ public class RedisUserRoleTemplate {
 //        this.hashOperations = redisTemplate.opsForHash();
 //    }
 
-    public void add(RedisUserRole user) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("userId", user.getUserId());
-        data.put("roles", user.getRoles());
+//    public void add(RedisUserRole user) {
 //        hashOperations.put("USER", user.getToken(), user);
-        hashOperations.putAll(user.getToken(), data);
-        log.info("User with token {} saved", user.getToken());
-    }
+//        log.info("User with token {} saved", user.getToken());
+//    }
+
+//    public RedisUserRole get(String token) {
+//        return (RedisUserRole) hashOperations.get("USER", token);
+//    }
 
     public RedisUserRole get(String token) {
         String userId = (String) hashOperations.get(token, "userId");

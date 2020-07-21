@@ -6,6 +6,7 @@ import com.micro.user.domain.User;
 import com.micro.user.dto.LoginDto;
 import com.micro.user.dto.UserRegisterDto;
 //import com.micro.user.repo.RedisUserRoleRepo;
+import com.micro.user.repo.RedisUserRoleTemplate;
 import com.micro.user.repo.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class UserService {
     UserRepo userRepo;
     @Autowired
     MongoTemplate mongoTemplate;
-//    @Autowired
-//    RedisUserRoleRepo redisUserRoleRepo;
+
+    @Autowired
+    RedisUserRoleTemplate redisUserRoleTemplate;
 
     public User saveUser(UserRegisterDto dto){
         User user = User.of(dto);
@@ -42,28 +44,11 @@ public class UserService {
         String token = AppUtils.generateOTP(6);
         user.setToken(token);
         return userRepo.save(user);
-
-//        RedisUserRole userRole = redisUserRoleRepo.findByToken("544332");
-//        log.info("user role {}", userRole);
-//
-////        List<RedisUserRole> userRoles =  redisUserRoleRepo.findAll();
-////        log.info("Size {}", userRoles.size());
-//
-////        addUserDetails(user);
-//        return token;
     }
 
-    /**
-     * add user details like tokens and roles in the redis
-     * @param
-     * @return RedisUserRole
-     */
-//    public RedisUserRole addUserDetails(User user){
-//        RedisUserRole userRole = RedisUserRole.of(user);
-//        return redisUserRoleRepo.save(userRole);
-//    }
-
     public User getUserDetails(String userId){
+//        RedisUserRole userRole = redisUserRoleTemplate.get("684801");
+//        log.info("User role {}", userRole);
         return userRepo.findById(userId).orElse(null);
     }
 }
