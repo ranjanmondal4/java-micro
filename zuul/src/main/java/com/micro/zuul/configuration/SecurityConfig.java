@@ -1,6 +1,6 @@
 package com.micro.zuul.configuration;
 
-import com.micro.zuul.repo.RedisUserRoleRepo;
+import com.micro.zuul.repo.RedisUserRoleTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     MongoTemplate mongoTemplate;
 
     @Autowired
-    RedisUserRoleRepo redisUserRoleRepo;
+    RedisUserRoleTemplate redisUserRoleTemplate;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest()
                 .authenticated();
 
-        http.addFilterBefore(new AuthenticationFilter(mongoTemplate, redisUserRoleRepo), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new AuthenticationFilter(mongoTemplate, redisUserRoleTemplate), BasicAuthenticationFilter.class);
     }
 
     @Override

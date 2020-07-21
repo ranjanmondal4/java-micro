@@ -5,7 +5,8 @@ import com.micro.zuul.domain.RedisUserRole;
 import com.micro.zuul.domain.User;
 import com.micro.zuul.dto.LoginDto;
 import com.micro.zuul.dto.UserRegisterDto;
-import com.micro.zuul.repo.RedisUserRoleRepo;
+//import com.micro.zuul.repo.RedisUserRoleRepo;
+import com.micro.zuul.repo.RedisUserRoleTemplate;
 import com.micro.zuul.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,10 @@ public class UserController {
 
     @Autowired
     UserService userService;
+//    @Autowired
+//    RedisUserRoleRepo userRoleRepo;
     @Autowired
-    RedisUserRoleRepo userRoleRepo;
-
+RedisUserRoleTemplate redisUserRoleTemplate;
     @GetMapping
     public User getUser(){
         RedisUserRole user = AppUtils.getLoggedInUser();
@@ -31,7 +33,8 @@ public class UserController {
     String login(@RequestBody LoginDto loginDto){
         User user = userService.login(loginDto);
         RedisUserRole userRole = RedisUserRole.of(user);
-        userRoleRepo.save(userRole);
+        //userRoleRepo.save(userRole);
+        redisUserRoleTemplate.add(userRole);
         return user.getToken();
     }
 

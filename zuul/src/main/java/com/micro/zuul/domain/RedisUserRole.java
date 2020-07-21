@@ -10,12 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Data
-@RedisHash
+//@RedisHash
 public class RedisUserRole implements Serializable {
     private static final long serialVersionUID = -2601175617857390837L;
-    @Id
+//    @Id
     private String userId;
-    @Indexed
+//    @Indexed
     private String token;
     private List<String> roles;
 
