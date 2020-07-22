@@ -8,6 +8,8 @@ import com.micro.zuul.dto.UserRegisterDto;
 //import com.micro.zuul.repo.RedisUserRoleRepo;
 import com.micro.zuul.repo.RedisUserRoleTemplate;
 import com.micro.zuul.service.UserService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +24,21 @@ public class UserController {
 //    @Autowired
 //    RedisUserRoleRepo userRoleRepo;
     @Autowired
-RedisUserRoleTemplate redisUserRoleTemplate;
-    @GetMapping
+    RedisUserRoleTemplate redisUserRoleTemplate;
+
+    @GetMapping("/details")
     public User getUser(){
         RedisUserRole user = AppUtils.getLoggedInUser();
         return userService.getUserDetails(user.getUserId());
     }
 
+    @HystrixCommand(fallbackMethod = "defaultLogin", commandKey = "common-key"
+            , commandProperties = {
+            @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value="60")
+            }
+    )
     @PostMapping("/login")
     String login(@RequestBody LoginDto loginDto){
         User user = userService.login(loginDto);
@@ -36,6 +46,11 @@ RedisUserRoleTemplate redisUserRoleTemplate;
         //userRoleRepo.save(userRole);
         redisUserRoleTemplate.add(userRole);
         return user.getToken();
+    }
+
+    String defaultLogin(@RequestBody LoginDto loginDto){
+        log.info("default login called");
+        return "abcd";
     }
 
     @PostMapping("/register")

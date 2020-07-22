@@ -38,6 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
                 "/configuration/security", "/swagger-ui.html", "/webjars/**", "/static/**");
 
+        web.ignoring().antMatchers("/hystrix/images/*");
+        web.ignoring().antMatchers("/hystrix");
+
         web.ignoring().antMatchers("/user/login");
         web.ignoring().antMatchers("/user/register");
 

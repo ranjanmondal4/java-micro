@@ -4,6 +4,8 @@ import com.micro.user.domain.User;
 import com.micro.user.dto.LoginDto;
 import com.micro.user.dto.UserRegisterDto;
 import com.micro.user.service.UserService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +39,22 @@ public class UserController {
 
 
 
+    @HystrixCommand(fallbackMethod = "defaultLogin" , commandKey = "common-key"
+//            , commandProperties = {
+//            @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE"),
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value="60")
+//    }
+    )
     @PostMapping("/login")
     public User login(@RequestBody LoginDto loginDto){ // http://localhost:8087/api/v1/user/1/cabinet
         return userService.login(loginDto);
+    }
+
+
+    public User defaultLogin(@RequestBody LoginDto loginDto){ // http://localhost:8087/api/v1/user/1/cabinet
+        log.info("comes here");
+        return new User();
     }
 
 }
