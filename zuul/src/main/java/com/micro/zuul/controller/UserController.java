@@ -1,6 +1,7 @@
 package com.micro.zuul.controller;
 
 import com.micro.zuul.configuration.AppUtils;
+import com.micro.zuul.configuration.EnvironmentVariables;
 import com.micro.zuul.domain.RedisUserRole;
 import com.micro.zuul.domain.User;
 import com.micro.zuul.dto.LoginDto;
@@ -33,6 +34,7 @@ public class UserController {
     @GetMapping("/details")
     public User getUser(){
         RedisUserRole user = AppUtils.getLoggedInUser();
+//        log.info("Expiry time {}", EnvironmentVariables.);
         return userService.getUserDetails(user.getUserId());
     }
 

@@ -1,5 +1,6 @@
 package com.micro.zuul.domain;
 
+import com.micro.zuul.configuration.EnvironmentVariables;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Data
-@RedisHash
+@RedisHash(timeToLive = EnvironmentVariables.tokenExpiry)
 public class RedisUserRole implements Serializable {
     private static final long serialVersionUID = -2601175617857390837L;
     @Id
