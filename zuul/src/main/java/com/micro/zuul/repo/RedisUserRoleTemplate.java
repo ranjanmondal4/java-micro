@@ -30,6 +30,7 @@ public class RedisUserRoleTemplate {
 //        this.hashOperations = redisTemplate.opsForHash();
 //    }
 
+
     public void add(RedisUserRole user) {
         Map<String, Object> data = new HashMap<>();
         data.put("userId", user.getUserId());

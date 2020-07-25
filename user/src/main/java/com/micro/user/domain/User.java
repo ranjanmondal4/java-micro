@@ -4,6 +4,7 @@ import com.micro.user.dto.UserRegisterDto;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,6 +18,7 @@ public class User {
     @Indexed(unique = true)
     private String email;
     private String password;
+    @Transient
     private String token;
 
     public User(String email, String password){

@@ -41,7 +41,7 @@ public class UserService {
         if(!user.getPassword().equals(dto.getPassword()))
             return null;
 
-        String token = AppUtils.generateOTP(6);
+        String token = AppUtils.generateToken(15);
         user.setToken(token);
         return userRepo.save(user);
     }

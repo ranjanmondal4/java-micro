@@ -1,6 +1,7 @@
 package com.micro.zuul.configuration;
 
 import com.micro.zuul.domain.RedisUserRole;
+import com.micro.zuul.repo.RedisUserRoleRepo;
 import com.micro.zuul.repo.RedisUserRoleTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,11 +22,12 @@ import java.util.Objects;
 public class AuthenticationFilter extends GenericFilterBean {
 
     private MongoTemplate mongoTemplate;
-    private RedisUserRoleTemplate redisUserRoleTemplate;
+//    private RedisUserRoleTemplate redisUserRoleTemplate;
+    private RedisUserRoleRepo redisRepo;
 
-    public AuthenticationFilter(MongoTemplate mongoTemplate, RedisUserRoleTemplate redisUserRoleTemplate){
+    public AuthenticationFilter(MongoTemplate mongoTemplate, RedisUserRoleRepo redisRepo){
         this.mongoTemplate = mongoTemplate;
-        this.redisUserRoleTemplate = redisUserRoleTemplate;
+        this.redisRepo = redisRepo;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         log.info("In Authentication filter, Token {}", token);
 
         if(!StringUtils.isEmpty(token)){
-            RedisUserRole userRole = redisUserRoleTemplate.get(token);
+            RedisUserRole userRole = redisRepo.findByToken(token);
             log.info("User role {}", userRole);
             if(!Objects.isNull(userRole)){
                 UserAuthentication authentication = new UserAuthentication(userRole);

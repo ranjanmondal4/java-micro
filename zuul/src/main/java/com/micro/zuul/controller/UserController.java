@@ -8,6 +8,7 @@ import com.micro.zuul.dto.UserRegisterDto;
 //import com.micro.zuul.repo.RedisUserRoleRepo;
 import com.micro.zuul.repo.RedisUserRoleTemplate;
 import com.micro.zuul.service.UserService;
+import com.micro.zuul.service.redis.UserRedisService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class UserController {
     @Autowired
     RedisUserRoleTemplate redisUserRoleTemplate;
 
+    @Autowired
+    UserRedisService userRedisService;
+
     @GetMapping("/details")
     public User getUser(){
         RedisUserRole user = AppUtils.getLoggedInUser();
@@ -42,9 +46,12 @@ public class UserController {
     @PostMapping("/login")
     String login(@RequestBody LoginDto loginDto){
         User user = userService.login(loginDto);
+        log.info("User token {}", user.getToken());
         RedisUserRole userRole = RedisUserRole.of(user);
+        userRedisService.addUserDetails(userRole);
         //userRoleRepo.save(userRole);
-        redisUserRoleTemplate.add(userRole);
+//        redisUserRoleTemplate.add(userRole);
+
         return user.getToken();
     }
 

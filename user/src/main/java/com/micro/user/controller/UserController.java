@@ -53,7 +53,7 @@ public class UserController {
 
 
     public User defaultLogin(@RequestBody LoginDto loginDto){ // http://localhost:8087/api/v1/user/1/cabinet
-        log.info("comes here");
+//        log.info("comes here");
         return new User();
     }
 
