@@ -1,6 +1,7 @@
 package com.micro.user.service;
 
 import com.micro.user.configuration.AppUtils;
+import com.micro.user.configuration.EnvironmentVariables;
 import com.micro.user.domain.RedisUserRole;
 import com.micro.user.domain.User;
 import com.micro.user.dto.LoginDto;
@@ -28,6 +29,9 @@ public class UserService {
     @Autowired
     RedisUserRoleTemplate redisUserRoleTemplate;
 
+    @Autowired
+    EnvironmentVariables environmentVariables;
+
     public User saveUser(UserRegisterDto dto){
         User user = User.of(dto);
         return mongoTemplate.insert(user, "user");
@@ -41,7 +45,7 @@ public class UserService {
         if(!user.getPassword().equals(dto.getPassword()))
             return null;
 
-        String token = AppUtils.generateToken(15);
+        String token = AppUtils.generateToken(environmentVariables.getPasswordLength());
         user.setToken(token);
         return userRepo.save(user);
     }

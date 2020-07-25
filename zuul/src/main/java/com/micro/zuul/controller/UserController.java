@@ -46,7 +46,6 @@ public class UserController {
     @PostMapping("/login")
     String login(@RequestBody LoginDto loginDto){
         User user = userService.login(loginDto);
-        log.info("User token {}", user.getToken());
         RedisUserRole userRole = RedisUserRole.of(user);
         userRedisService.addUserDetails(userRole);
         //userRoleRepo.save(userRole);

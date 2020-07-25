@@ -30,11 +30,9 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public User getUserName(@PathVariable("userId") String userId){ // http://localhost:8087/api/v1/user/1/cabinet
-        log.info("Inside user name {}", userId );
+//        log.info("Inside user name {}", userId );
         return userService.getUserDetails(userId);
-//        return userId;
 //        return restTemplate.getForObject("http://cabinet-server/api/v1/user/1/cabinet", String.class);
-//        return "User - Ranjan";
     }
 
 
