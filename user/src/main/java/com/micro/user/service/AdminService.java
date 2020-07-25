@@ -2,40 +2,33 @@ package com.micro.user.service;
 
 import com.micro.user.configuration.AppUtils;
 import com.micro.user.configuration.EnvironmentVariables;
-import com.micro.user.domain.RedisUserRole;
 import com.micro.user.domain.User;
 import com.micro.user.dto.LoginDto;
 import com.micro.user.dto.UserRegisterDto;
-//import com.micro.user.repo.RedisUserRoleRepo;
-import com.micro.user.repo.RedisUserRoleTemplate;
 import com.micro.user.repo.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
-@Service
 @Slf4j
-public class UserService {
+@Service
+public class AdminService {
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     @Autowired
     UserRepo userRepo;
-    @Autowired
-    MongoTemplate mongoTemplate;
-//
-//    @Autowired
-//    RedisUserRoleTemplate redisUserRoleTemplate;
 
     @Autowired
     EnvironmentVariables environmentVariables;
 
-    public User add(UserRegisterDto dto){
-        User user = User.of(dto);
+    public User add(UserRegisterDto dto) {
+        User user = User.of(dto, User.UserType.ADMIN);
         return mongoTemplate.insert(user, "user");
-//        return userRepo.save(user);
     }
 
     public User login(LoginDto dto){
@@ -50,7 +43,7 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public User getUserDetails(String userId){
-        return userRepo.findById(userId).orElse(null);
+    public User getDetails(String adminId){
+        return userRepo.findById(adminId).orElse(null);
     }
 }

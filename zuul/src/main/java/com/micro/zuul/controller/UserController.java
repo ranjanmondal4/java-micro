@@ -1,14 +1,13 @@
 package com.micro.zuul.controller;
 
 import com.micro.zuul.configuration.AppUtils;
-import com.micro.zuul.configuration.EnvironmentVariables;
 import com.micro.zuul.domain.RedisUserRole;
 import com.micro.zuul.domain.User;
 import com.micro.zuul.dto.LoginDto;
 import com.micro.zuul.dto.UserRegisterDto;
 //import com.micro.zuul.repo.RedisUserRoleRepo;
 import com.micro.zuul.repo.RedisUserRoleTemplate;
-import com.micro.zuul.service.UserService;
+import com.micro.zuul.service.UserFeignService;
 import com.micro.zuul.service.redis.UserRedisService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UserFeignService userFeignService;
 //    @Autowired
 //    RedisUserRoleRepo userRoleRepo;
     @Autowired
@@ -34,8 +33,7 @@ public class UserController {
     @GetMapping("/details")
     public User getUser(){
         RedisUserRole user = AppUtils.getLoggedInUser();
-//        log.info("Expiry time {}", EnvironmentVariables.);
-        return userService.getUserDetails(user.getUserId());
+        return userFeignService.getUserDetails(user.getUserId());
     }
 
     @HystrixCommand(fallbackMethod = "defaultLogin", commandKey = "common-key"
@@ -47,7 +45,7 @@ public class UserController {
     )
     @PostMapping("/login")
     String login(@RequestBody LoginDto loginDto){
-        User user = userService.login(loginDto);
+        User user = userFeignService.login(loginDto);
         RedisUserRole userRole = RedisUserRole.of(user);
         userRedisService.addUserDetails(userRole);
         //userRoleRepo.save(userRole);
@@ -63,7 +61,7 @@ public class UserController {
 
     @PostMapping("/register")
     public User register(@RequestBody UserRegisterDto dto){
-        return userService.register(dto);
+        return userFeignService.register(dto);
     }
 
 }

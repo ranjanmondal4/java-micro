@@ -25,9 +25,12 @@ public class AuthenticationFilter extends GenericFilterBean {
 //    private RedisUserRoleTemplate redisUserRoleTemplate;
     private RedisUserRoleRepo redisRepo;
 
-    public AuthenticationFilter(MongoTemplate mongoTemplate, RedisUserRoleRepo redisRepo){
+    private JwtTokenProvider jwtTokenProvider;
+
+    public AuthenticationFilter(MongoTemplate mongoTemplate, RedisUserRoleRepo redisRepo, JwtTokenProvider jwtTokenProvider){
         this.mongoTemplate = mongoTemplate;
         this.redisRepo = redisRepo;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -38,14 +41,26 @@ public class AuthenticationFilter extends GenericFilterBean {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String token = request.getHeader("Authorization");
-        log.info("In Authentication filter, Token {}", token);
+//        log.info("In Authentication filter, Token {}", token);
 
         if(!StringUtils.isEmpty(token)){
-            RedisUserRole userRole = redisRepo.findByToken(token);
-            log.info("User role {}", userRole);
-            if(!Objects.isNull(userRole)){
-                UserAuthentication authentication = new UserAuthentication(userRole);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            // for admin only - JWT
+            if(token.contains("Bearer")){
+                token = jwtTokenProvider.removeToken(token);
+                if(jwtTokenProvider.validateToken(token)){
+                    RedisUserRole userRole = jwtTokenProvider.getUser(token);
+                    UserAuthentication authentication = new UserAuthentication(userRole);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+            // for user only - custom token created by user service
+            else {
+                RedisUserRole userRole = redisRepo.findByToken(token);
+//                log.info("User role {}", userRole);
+                if(!Objects.isNull(userRole)){
+                    UserAuthentication authentication = new UserAuthentication(userRole);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         }
         chain.doFilter(request, response);

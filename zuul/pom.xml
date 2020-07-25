@@ -97,6 +97,11 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 			<version>1.4.0.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

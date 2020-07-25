@@ -27,6 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     RedisUserRoleRepo redisUserRoleRepo;
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -35,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest()
                 .authenticated();
 
-        http.addFilterBefore(new AuthenticationFilter(mongoTemplate, redisUserRoleRepo), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new AuthenticationFilter(mongoTemplate, redisUserRoleRepo, jwtTokenProvider), BasicAuthenticationFilter.class);
     }
 
     @Override
@@ -48,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.ignoring().antMatchers("/user/login");
         web.ignoring().antMatchers("/user/register");
+
+        web.ignoring().antMatchers("/admin/login", "/admin/register");
 
         web.ignoring().antMatchers("/*/")
                 .antMatchers("/eureka/**")

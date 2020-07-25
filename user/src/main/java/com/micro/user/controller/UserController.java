@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping("/register")
     public User register(@RequestBody UserRegisterDto dto){
-        return userService.saveUser(dto);
+        return userService.add(dto);
     }
 
     @GetMapping("/{userId}")
