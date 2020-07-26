@@ -50,11 +50,11 @@ public class JwtTokenProvider {
                 .setHeaderParam("alg", "HS256")
                 .setClaims(claims)
                 .setIssuedAt(now)
+                .setIssuer("zuul-service")
+                .setAudience("user-service")
                 .setExpiration(expiredAt)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-
-        // issuer and audience
     }
 
     public RedisUserRole getUser(String token) {
