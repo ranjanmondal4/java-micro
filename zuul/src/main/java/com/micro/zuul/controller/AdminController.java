@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
-@RequestMapping("/admin")
+@RequestMapping("/api/v1/admin")
 @RestController
 public class AdminController {
 

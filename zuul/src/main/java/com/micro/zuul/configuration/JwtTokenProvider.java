@@ -75,7 +75,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            log.info("::::::::: exception {}", e.getMessage());
+//            log.info("::::::::: exception {}", e.getMessage());
             throw new RuntimeException("Expired or invalid JWT token");
         }
     }

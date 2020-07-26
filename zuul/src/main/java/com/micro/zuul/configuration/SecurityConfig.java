@@ -49,10 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/hystrix/images/*");
         web.ignoring().antMatchers("/hystrix");
 
-        web.ignoring().antMatchers("/user/login");
-        web.ignoring().antMatchers("/user/register");
-
-        web.ignoring().antMatchers("/admin/login", "/admin/register");
+        web.ignoring().antMatchers("/api/v1/user/register", "/api/v1/user/login");
+        web.ignoring().antMatchers("/api/v1/admin/register", "/api/v1/admin/login");
 
         web.ignoring().antMatchers("/*/")
                 .antMatchers("/eureka/**")
