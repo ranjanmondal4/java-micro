@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -18,11 +19,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
     private String secretKey;
-
-//    private long validityInMilliseconds = 1000*60;
 
     @Autowired
     RedisUserRoleRepo userRoleRepo;
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
     }
 
     public String removeToken(String token) {
-        if (token != null && token.startsWith("Bearer ")) {
+        if (token != null && token.startsWith(AppConstants.BEARER_WITH_SPACE)) {
             return token.substring(7);
         }
         return null;
@@ -75,6 +75,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            log.info("::::::::: exception {}", e.getMessage());
             throw new RuntimeException("Expired or invalid JWT token");
         }
     }

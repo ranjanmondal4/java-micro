@@ -40,12 +40,12 @@ public class AuthenticationFilter extends GenericFilterBean {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(AppConstants.AUTHORIZATION);
 //        log.info("In Authentication filter, Token {}", token);
 
         if(!StringUtils.isEmpty(token)){
             // for admin only - JWT
-            if(token.contains("Bearer")){
+            if(token.contains(AppConstants.BEARER_WITH_SPACE)){
                 token = jwtTokenProvider.removeToken(token);
                 if(jwtTokenProvider.validateToken(token)){
                     RedisUserRole userRole = jwtTokenProvider.getUser(token);

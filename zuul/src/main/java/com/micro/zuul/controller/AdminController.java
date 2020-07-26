@@ -1,5 +1,6 @@
 package com.micro.zuul.controller;
 
+import com.micro.zuul.configuration.AppConstants;
 import com.micro.zuul.configuration.AppUtils;
 import com.micro.zuul.configuration.JwtTokenProvider;
 import com.micro.zuul.domain.RedisUserRole;
@@ -34,7 +35,7 @@ public class AdminController {
     User login(@RequestBody LoginDto loginDto){
         User admin = userFeignService.loginAdmin(loginDto);
         if(!Objects.isNull(admin)){
-            admin.setToken(jwtTokenProvider.createToken(admin.getEmail(), admin.getId(), Arrays.asList("ROLE_SUPER_ADMIN")));
+            admin.setToken(AppConstants.BEARER_WITH_SPACE + jwtTokenProvider.createToken(admin.getEmail(), admin.getId(), Arrays.asList("ROLE_SUPER_ADMIN")));
         }else {
             admin.setToken(null);
         }
@@ -44,7 +45,7 @@ public class AdminController {
     @GetMapping("/details")
     public User getDetails(){
         RedisUserRole user = AppUtils.getLoggedInUser();
-        log.info("user id {}", user.getUserId());
+//        log.info("user id {}", user.getUserId());
         return userFeignService.getAdminDetails(user.getUserId());
     }
 }
