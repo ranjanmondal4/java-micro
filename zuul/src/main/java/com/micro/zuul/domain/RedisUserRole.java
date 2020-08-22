@@ -1,6 +1,7 @@
 package com.micro.zuul.domain;
 
 import com.micro.zuul.configuration.EnvironmentVariables;
+import com.micro.zuul.dto.UserDto;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -20,7 +21,7 @@ public class RedisUserRole implements Serializable {
     private String token;
     private List<String> roles;
 
-    public static RedisUserRole of(User user){
+    public static RedisUserRole of(UserDto user){
         RedisUserRole userRole = new RedisUserRole();
         userRole.userId = user.getId();
         userRole.token = user.getToken();

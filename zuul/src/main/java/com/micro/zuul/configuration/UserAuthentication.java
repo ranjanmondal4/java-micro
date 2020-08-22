@@ -1,7 +1,6 @@
 package com.micro.zuul.configuration;
 
 import com.micro.zuul.domain.RedisUserRole;
-import com.micro.zuul.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

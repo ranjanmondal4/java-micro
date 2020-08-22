@@ -1,12 +1,15 @@
-package com.micro.user.domain;
+package com.micro.user.domain.user;
 
 import com.micro.user.dto.UserRegisterDto;
+import com.mongodb.lang.NonNull;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Document
 @Getter
@@ -15,9 +18,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
     @Id
     private String id;
+    private String firstName;
+    private String lastName;
+    @NonNull
     @Indexed(unique = true)
-    private String email;
+    private String userName;
+    @NonNull
     private String password;
+    @Indexed(unique = true)
+    private Email primaryEmail;
+    private List<Email> secondaryEmails = new ArrayList<>();
+
+    @NonNull
     private UserType userType;
     public enum UserType {
         USER, ADMIN;
@@ -25,13 +37,15 @@ public class User {
     @Transient
     private String token;
 
-    public User(String email, String password){
-        this.email = email;
+    public User(String emailId, String password){
+        Email email = Email.of(emailId);
+        this.primaryEmail = email;
         this.password = password;
     }
 
-    public User(String email, String password, UserType userType){
-        this.email = email;
+    public User(String emailId, String password, UserType userType){
+        Email email = Email.of(emailId);
+        this.primaryEmail = email;
         this.password = password;
         this.userType = userType;
     }
@@ -44,3 +58,4 @@ public class User {
         return new User(dto.getEmail(), dto.getPassword(), type);
     }
 }
+

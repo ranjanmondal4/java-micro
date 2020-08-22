@@ -1,10 +1,13 @@
 package com.micro.user.repo;
 
-import com.micro.user.domain.User;
+import com.micro.user.domain.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.Query;
 
-@Repository
 public interface UserRepo extends MongoRepository<User, String> {
-    User findByEmail(String email);
+    @Query("{'emails.mailId': ?0}")
+    User findBySecondaryEmailId(String emailId);
+
+    @Query("{'primaryEmail.mailId': ?0}")
+    User findByPrimaryEmailId(String emailId);
 }

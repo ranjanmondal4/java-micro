@@ -2,13 +2,12 @@ package com.micro.user.service;
 
 import com.micro.user.configuration.AppUtils;
 import com.micro.user.configuration.EnvironmentVariables;
-import com.micro.user.domain.User;
+import com.micro.user.domain.user.User;
 import com.micro.user.dto.LoginDto;
 import com.micro.user.dto.UserRegisterDto;
-import com.micro.user.repo.UserRepo;
+import com.micro.user.repo.UserRepoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -17,22 +16,25 @@ import java.util.Objects;
 @Service
 public class AdminService {
 
-    @Autowired
-    MongoTemplate mongoTemplate;
-
-    @Autowired
-    UserRepo userRepo;
+//    @Autowired
+//    MongoTemplate mongoTemplate;
+//
+//    @Autowired
+//    UserRepo userRepo;
 
     @Autowired
     EnvironmentVariables environmentVariables;
 
+    @Autowired
+    private UserRepoImpl userRepoImpl;
+
     public User add(UserRegisterDto dto) {
         User user = User.of(dto, User.UserType.ADMIN);
-        return mongoTemplate.insert(user, "user");
+        return userRepoImpl.addUser(user);
     }
 
     public User login(LoginDto dto){
-        User user = userRepo.findByEmail(dto.getEmail());
+        User user = userRepoImpl.findByPrimaryEmailId(dto.getEmail());
         if(Objects.isNull(user))
             return null;
         if(!user.getPassword().equals(dto.getPassword()))
@@ -40,10 +42,10 @@ public class AdminService {
 
         String token = AppUtils.generateToken(environmentVariables.getPasswordLength());
         user.setToken(token);
-        return userRepo.save(user);
+        return userRepoImpl.save(user);
     }
 
     public User getDetails(String adminId){
-        return userRepo.findById(adminId).orElse(null);
+        return userRepoImpl.findById(adminId).orElse(null);
     }
 }

@@ -1,6 +1,6 @@
 package com.micro.user.controller;
 
-import com.micro.user.domain.User;
+import com.micro.user.domain.user.User;
 import com.micro.user.dto.LoginDto;
 import com.micro.user.dto.UserRegisterDto;
 import com.micro.user.service.AdminService;
