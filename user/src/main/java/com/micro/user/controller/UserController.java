@@ -32,15 +32,17 @@ public class UserController {
     LocaleService localeService;
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserRegisterDto dto){
+    public ResponseUtils.Response<UserDto> register(@RequestBody UserRegisterDto dto){
         User user = userService.addUser(dto);
-        return userDtoMapper.toUserDto(user);
+        return ResponseUtils.generateResponse(true, userDtoMapper.toUserDto(user),
+                localeService.getMessage(MessageConstants.USER_REGISTERED_SUCCESSFULLY));
     }
 
     @GetMapping("/{userId}")
-    public UserDto getUserName(@PathVariable("userId") String userId){ // http://localhost:8087/api/v1/user/1/cabinet
+    public ResponseUtils.Response<UserDto> getUserDetails(@PathVariable("userId") String userId){ // http://localhost:8087/api/v1/user/1/cabinet
         User user = userService.getUserDetails(userId);
-        return userDtoMapper.toUserDto(user);
+        return ResponseUtils.generateResponse(true, userDtoMapper.toUserDto(user),
+                localeService.getMessage(MessageConstants.USER_FOUND));
     }
 
 

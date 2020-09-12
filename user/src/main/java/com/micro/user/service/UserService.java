@@ -29,6 +29,11 @@ public class UserService {
     private LocaleService localeService;
 
     public User addUser(UserRegisterDto dto){
+        User existingUser = userRepoImpl.findByPrimaryEmailId(dto.getEmail());
+        if(!Objects.isNull(existingUser)){
+            throw DataNotFoundException.of(existingUser.getPrimaryEmail().isVerified() ?
+                    MessageConstants.USER_ALREADY_REGISTERED : MessageConstants.EMAIL_NOT_VERIFIED);
+        }
         dto.setPassword(encoder.encode(dto.getPassword()));
         User user = User.of(dto, User.Role.DIRECT_CLIENT);
         return userRepoImpl.addUser(user);
@@ -40,6 +45,10 @@ public class UserService {
             throw DataNotFoundException.of(MessageConstants.USER_NOT_REGISTERED);
         }
 
+        if(user.getUserState() != User.UserState.ACTIVE)
+            throw DataNotFoundException.of(localeService.getMessage(MessageConstants.USER_STATE,
+                    user.getUserState().getValue()));
+
         if(!encoder.matches(dto.getPassword(), user.getPassword()))
             throw DataNotFoundException.of(MessageConstants.INVALID_PASSWORD);
 
@@ -48,28 +57,7 @@ public class UserService {
         return userRepoImpl.save(user);
     }
 
-//    public ResponseUtils.Response<? extends Object> login(LoginDto dto){
-//        User user = userRepoImpl.findByPrimaryEmailId(dto.getUserName());
-//        if(Objects.isNull(user)) {
-//        //    throw DataNotFoundException.of(localeService.getMessage("user.not.registered"));
-//            return ResponseUtils.generateResponse(false, user, localeService.getMessage("user.not.registered"));
-//        }
-//
-//        if(!encoder.matches(dto.getPassword(), user.getPassword())) {
-//            // throw DataNotFoundException.of(localeService.getMessage("invalid.password"));
-//            return ResponseUtils.generateResponse(false, user, localeService.getMessage("invalid.password"));
-//        }
-//
-//        String token = AppUtils.generateToken(environmentVariables.getPasswordLength());
-//        user.setToken(token);
-//        user = userRepoImpl.save(user);
-//
-//       return ResponseUtils.generateResponse(true, user, "user.found.successfully");
-//    }
-
-
-
     public User getUserDetails(String userId){
-        return userRepoImpl.findById(userId).orElse(null);
+        return userRepoImpl.findById(userId).orElseThrow(() -> DataNotFoundException.of(MessageConstants.USER_NOT_FOUND));
     }
 }

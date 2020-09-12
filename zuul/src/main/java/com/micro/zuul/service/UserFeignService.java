@@ -17,10 +17,10 @@ public interface UserFeignService {
 
 
     @GetMapping("/api/v1/user/{userId}")
-    UserDto getUserDetails(@PathVariable("userId") String userId);
+    ResponseUtils.Response<UserDto> getUserDetails(@PathVariable("userId") String userId);
 
     @PostMapping("/api/v1/user/register")
-    UserDto register(@RequestBody UserRegisterDto dto);
+    ResponseUtils.Response<UserDto> register(@RequestBody UserRegisterDto dto);
 
     @PostMapping("/api/v1/user/folder")
     ResponseEntity<Object> addUserFolder(@RequestBody AddFolderDTO dto, @RequestParam String userId);

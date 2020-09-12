@@ -41,9 +41,7 @@ public class UserController {
     @GetMapping("/details")
     public ResponseEntity<Object> getUser(){
         RedisUserRole user = AppUtils.getLoggedInUser();
-        UserDto userDto = userFeignService.getUserDetails(user.getUserId());
-        return ResponseUtils.generate(!Objects.isNull(userDto), userDto,
-                localeService.getMessage(MessageConstant.DATA_FOUND));
+        return ResponseUtils.generate(userFeignService.getUserDetails(user.getUserId()));
     }
 
     /*@HystrixCommand(fallbackMethod = "defaultLogin", commandKey = "common-key"
@@ -55,17 +53,17 @@ public class UserController {
     )*/
     @PostMapping("/login")
     ResponseEntity<Object> login(@RequestBody LoginDto loginDto){
-        ResponseUtils.Response<UserDto> userDTO = userFeignService.login(loginDto);
-        if(userDTO.isSuccess()){
-            UserDto user = userDTO.getData();
+        ResponseUtils.Response<UserDto> response = userFeignService.login(loginDto);
+        if(response.isSuccess()){
+            UserDto user = response.getData();
             RedisUserRole userRole = RedisUserRole.of(user);
             userRedisService.addUserDetails(userRole);
             Map<String, Object> data = new HashMap<>();
             data.put("token", user.getToken());
-            return ResponseUtils.generate(userDTO.isSuccess(), data, userDTO.getMessage());
+            return ResponseUtils.generate(response.isSuccess(), data, response.getMessage());
         }
 
-        return ResponseUtils.generate(userDTO);
+        return ResponseUtils.generate(response);
     }
 
     /*String defaultLogin(@RequestBody LoginDto loginDto){
@@ -74,9 +72,8 @@ public class UserController {
     }*/
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserRegisterDto dto){
-        return userFeignService.register(dto);
+    public ResponseEntity<Object> register(@RequestBody UserRegisterDto dto){
+        return ResponseUtils.generate(userFeignService.register(dto));
     }
 
 }
-

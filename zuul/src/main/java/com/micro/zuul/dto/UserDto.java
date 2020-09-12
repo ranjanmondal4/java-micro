@@ -13,17 +13,9 @@ public class UserDto {
     private String id;
     private String firstName;
     private String lastName;
-
-    private String userName;
-    private String password;
     private Email primaryEmail;
-    private List<Email> secondaryEmails = new ArrayList<>();
-
-    private UserType userType;
-    public enum UserType {
-        USER, ADMIN;
-    }
-
+    private List<Email> secondaryEmails;
+//    private List<User.Role> roles;
     private String token;
 }
 

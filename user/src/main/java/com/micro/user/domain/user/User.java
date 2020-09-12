@@ -41,27 +41,38 @@ public class User {
     private String token;
     private List<PhoneNumber> phoneNumbers = new ArrayList<>();
     private LocalDateTime createdAt;
+    @NonNull
     private UserState userState;
     public enum UserState {
-        ACTIVE, NOT_VERIFIED, DISABLED_TEMPORARY, DEACTIVATED;
+        ACTIVE("Active"), NOT_VERIFIED("Not Verified"), SUSPENDED_TEMPORARY("Suspended Temporary"),
+        DEACTIVATED("Deactivated By Admin");
+
+        private String value;
+        UserState(String value){
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
     private List<ActiveHistory> activeHistories = new ArrayList<>();
     private List<String> accessRight;
     private List<AccessRightHistory> accessRights = new ArrayList<>();
 
-    public User(String emailId, String password){
+    private User(String emailId, String password){
         Email email = Email.of(emailId);
         this.primaryEmail = email;
-//        this.userName = emailId;
         this.password = password;
+        this.userState = UserState.NOT_VERIFIED;
     }
 
-    public User(String emailId, String password, Role role){
+    private User(String emailId, String password, Role role){
         Email email = Email.of(emailId);
         this.primaryEmail = email;
-//        this.userName = emailId;
         this.password = password;
         this.roles = Arrays.asList(role);
+        this.userState = UserState.NOT_VERIFIED;
     }
 
     public static User of(UserRegisterDto dto){
