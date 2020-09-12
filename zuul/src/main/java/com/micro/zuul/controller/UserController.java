@@ -28,8 +28,7 @@ public class UserController {
 
     @Autowired
     UserFeignService userFeignService;
-//    @Autowired
-//    RedisUserRoleRepo userRoleRepo;
+
     @Autowired
     RedisUserRoleTemplate redisUserRoleTemplate;
 
@@ -56,12 +55,17 @@ public class UserController {
     )*/
     @PostMapping("/login")
     ResponseEntity<Object> login(@RequestBody LoginDto loginDto){
-        UserDto user = userFeignService.login(loginDto);
-        RedisUserRole userRole = RedisUserRole.of(user);
-        userRedisService.addUserDetails(userRole);
-        Map<String, Object> data = new HashMap<>();
-        data.put("token", user.getToken());
-        return ResponseUtils.generate(!Objects.isNull(user), data, localeService.getMessage(MessageConstant.CONFIRMED_PASSWORD_NOT_FOUND));
+        ResponseUtils.Response<UserDto> userDTO = userFeignService.login(loginDto);
+        if(userDTO.isSuccess()){
+            UserDto user = userDTO.getData();
+            RedisUserRole userRole = RedisUserRole.of(user);
+            userRedisService.addUserDetails(userRole);
+            Map<String, Object> data = new HashMap<>();
+            data.put("token", user.getToken());
+            return ResponseUtils.generate(userDTO.isSuccess(), data, userDTO.getMessage());
+        }
+
+        return ResponseUtils.generate(userDTO);
     }
 
     /*String defaultLogin(@RequestBody LoginDto loginDto){

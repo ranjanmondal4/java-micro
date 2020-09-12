@@ -1,5 +1,7 @@
 package com.micro.user;
 
+import com.micro.user.configuration.AppUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -13,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 @EnableCircuitBreaker
 @EnableHystrixDashboard
+@Slf4j
 public class UserApplication {
 
 	public static void main(String[] args) {
@@ -24,6 +27,8 @@ public class UserApplication {
 	public RestTemplate getRestTemplate(){
 		return new RestTemplate();
 	}
+
+
 
 	// do not delete for now
 //	@Bean

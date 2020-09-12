@@ -1,19 +1,18 @@
 package com.micro.user.controller;
 
+import com.micro.user.configuration.LocaleService;
+import com.micro.user.configuration.MessageConstants;
+import com.micro.user.configuration.ResponseUtils;
 import com.micro.user.domain.user.User;
 import com.micro.user.dto.LoginDto;
 import com.micro.user.dto.UserDto;
 import com.micro.user.dto.UserDtoMapper;
 import com.micro.user.dto.UserRegisterDto;
 import com.micro.user.service.UserService;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -29,6 +28,8 @@ public class UserController {
     @Autowired
     UserDtoMapper userDtoMapper;
 
+    @Autowired
+    LocaleService localeService;
 
     @PostMapping("/register")
     public UserDto register(@RequestBody UserRegisterDto dto){
@@ -52,9 +53,10 @@ public class UserController {
 //    }
     )*/
     @PostMapping("/login")
-    public UserDto login(@RequestBody LoginDto loginDto){ // http://localhost:8087/api/v1/user/1/cabinet
+    public ResponseUtils.Response<UserDto> login(@RequestBody LoginDto loginDto){
         User user = userService.login(loginDto);
-        return userDtoMapper.toUserDto(user);
+        UserDto userDto = userDtoMapper.toUserDto(user);
+        return ResponseUtils.generateResponse(true, userDto, localeService.getMessage(MessageConstants.USER_FOUND));
     }
 
 

@@ -37,6 +37,7 @@ public class RedisUserRole implements Serializable {
         return userRole;
     }
 
+
     @Override
     public String toString() {
         return "{ userId='" + userId + '\'' +

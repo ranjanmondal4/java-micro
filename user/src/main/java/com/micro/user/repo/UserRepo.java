@@ -10,4 +10,7 @@ public interface UserRepo extends MongoRepository<User, String> {
 
     @Query("{'primaryEmail.mailId': ?0}")
     User findByPrimaryEmailId(String emailId);
+
+    @Query("{'userName': ?0}")
+    User findByUserName(String userName);
 }

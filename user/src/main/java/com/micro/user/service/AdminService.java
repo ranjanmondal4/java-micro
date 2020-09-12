@@ -29,12 +29,12 @@ public class AdminService {
     private UserRepoImpl userRepoImpl;
 
     public User add(UserRegisterDto dto) {
-        User user = User.of(dto, User.UserType.ADMIN);
+        User user = User.of(dto, User.Role.ADMIN);
         return userRepoImpl.addUser(user);
     }
 
     public User login(LoginDto dto){
-        User user = userRepoImpl.findByPrimaryEmailId(dto.getEmail());
+        User user = userRepoImpl.findByPrimaryEmailId(dto.getUserName());
         if(Objects.isNull(user))
             return null;
         if(!user.getPassword().equals(dto.getPassword()))

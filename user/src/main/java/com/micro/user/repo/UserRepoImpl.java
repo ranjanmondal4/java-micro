@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Service
 public class UserRepoImpl {
+    private static final String COLLECTION_NAME = "user";
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -16,11 +17,15 @@ public class UserRepoImpl {
     private UserRepo userRepo;
 
     public User addUser(User user){
-        return mongoTemplate.insert(user, "user");
+        return mongoTemplate.insert(user, COLLECTION_NAME);
     }
 
     public User findByPrimaryEmailId(String email){
         return userRepo.findByPrimaryEmailId(email);
+    }
+
+    public User findByUserName(String userName){
+        return userRepo.findByUserName(userName);
     }
 
     public User save(User user){
