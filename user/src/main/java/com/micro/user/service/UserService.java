@@ -57,7 +57,7 @@ public class UserService {
         return userRepoImpl.save(user);
     }
 
-    public User getUserDetails(String userId){
+    public User findUserById(String userId){
         return userRepoImpl.findById(userId).orElseThrow(() -> DataNotFoundException.of(MessageConstants.USER_NOT_FOUND));
     }
 }

@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseUtils.Response<UserDto> getUserDetails(@PathVariable("userId") String userId){ // http://localhost:8087/api/v1/user/1/cabinet
-        User user = userService.getUserDetails(userId);
+        User user = userService.findUserById(userId);
         return ResponseUtils.generateResponse(true, userDtoMapper.toUserDto(user),
                 localeService.getMessage(MessageConstants.USER_FOUND));
     }

@@ -10,4 +10,6 @@ public interface MessageConstants {
     String USER_REGISTERED_SUCCESSFULLY = "user.registered.successfully";
     String DATA_FETCHED_SUCCESSFULLY = "data.fetched.successfully";
     String USER_STATE = "user.state";
+    String SAVED_SUCCESSFULLY = "saved.successfully";
+    String SOMETHING_WENT_WRONG = "something.went.wrong";
 }

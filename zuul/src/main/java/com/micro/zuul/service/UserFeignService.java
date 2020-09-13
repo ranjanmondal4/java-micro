@@ -1,6 +1,7 @@
 package com.micro.zuul.service;
 
 import com.micro.zuul.configuration.ResponseUtils;
+import com.micro.zuul.dto.ContactDto;
 import com.micro.zuul.dto.LoginDto;
 import com.micro.zuul.dto.UserDto;
 import com.micro.zuul.dto.UserRegisterDto;
@@ -24,6 +25,9 @@ public interface UserFeignService {
 
     @PostMapping("/api/v1/user/folder")
     ResponseEntity<Object> addUserFolder(@RequestBody AddFolderDTO dto, @RequestParam String userId);
+
+    @GetMapping("/api/v1/user/contact")
+    ResponseUtils.Response<ContactDto> addContact(@RequestBody ContactDto dto, @RequestParam String userId);
 
 //
 //    @PostMapping("/api/v1/admin/register")

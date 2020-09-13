@@ -1,5 +1,6 @@
 package com.micro.user.configuration;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,20 +17,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseUtils.Response<? extends Object> methodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("Exception - Method Argument {}", e.getMessage());
-        return ResponseUtils.generateResponse(false, null, localeService.getMessage(e.getMessage()));
+        log.error("Exception - {}", e.getMessage());
+        return ResponseUtils.generateResponse(false, null,
+                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());
     }
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseUtils.Response<? extends Object> DataNotFoundException(final DataNotFoundException e) {
-        log.error("Exception - Data not found {}", e.getMessage());
-        return ResponseUtils.generateResponse(false, null, localeService.getMessage(e.getMessage()));
+        log.error("Exception - {}", e.getMessage());
+        return ResponseUtils.generateResponse(false, null,
+                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseUtils.Response<? extends Object> exception(final Exception e) {
         log.error("Exception {}", e.getMessage());
-        return ResponseUtils.generateResponse(false, null, localeService.getMessage(e.getMessage()));
+        return ResponseUtils.generateResponse(false, null,
+                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());
     }
 }

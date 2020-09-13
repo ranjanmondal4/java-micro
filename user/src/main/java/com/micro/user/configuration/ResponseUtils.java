@@ -20,16 +20,19 @@ public class ResponseUtils {
     }
 
     public static <T> Response<T> generateResponse(boolean success, T data, String message){
-//        return Response.builder().success(success).data(data).message(message).build();
-        return new Response<>(success, data, message);
+        return new Response<>(success, data, message, null);
+    }
+
+    public static <T> Response<T> generateResponse(boolean success, T data, String message, String stackTrace){
+        return new Response<>(success, data, message, stackTrace);
     }
 
     @Data
-//    @Builder
     @AllArgsConstructor
     static public class Response<T> {
         private boolean success;
         private T data;
         private String message;
+        private String stackTrace;
     }
 }
