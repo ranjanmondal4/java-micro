@@ -5,6 +5,8 @@ import com.micro.zuul.configuration.ResponseUtils;
 import com.micro.zuul.domain.RedisUserRole;
 import com.micro.zuul.dto.ContactDto;
 import com.micro.zuul.service.UserFeignService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ public class ContactController {
     @Autowired
     private UserFeignService userFeignService;
 
+    @ApiOperation("add contacts")
     @PostMapping("/contact")
     public ResponseEntity<Object> addContact(@RequestBody ContactDto dto){
         RedisUserRole user = AppUtils.getLoggedInUser();

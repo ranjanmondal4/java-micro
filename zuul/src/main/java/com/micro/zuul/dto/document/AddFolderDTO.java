@@ -11,5 +11,5 @@ public class AddFolderDTO {
     @NotBlank
     private String description;
     @NotBlank
-    private String parentId;
+    private String parentFolderId;
 }

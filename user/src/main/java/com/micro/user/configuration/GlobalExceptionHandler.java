@@ -1,6 +1,5 @@
 package com.micro.user.configuration;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,7 +13,6 @@ public class GlobalExceptionHandler {
     @Autowired
     LocaleService localeService;
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseUtils.Response<? extends Object> methodArgumentNotValidException(final MethodArgumentNotValidException e) {
         log.error("Exception - {}", e.getMessage());
@@ -23,7 +21,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseUtils.Response<? extends Object> DataNotFoundException(final DataNotFoundException e) {
+    public ResponseUtils.Response<? extends Object> dataNotFoundException(final DataNotFoundException e) {
         log.error("Exception - {}", e.getMessage());
         return ResponseUtils.generateResponse(false, null,
                 localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());

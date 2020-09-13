@@ -6,9 +6,12 @@ import com.micro.zuul.dto.LoginDto;
 import com.micro.zuul.dto.UserDto;
 import com.micro.zuul.dto.UserRegisterDto;
 import com.micro.zuul.dto.document.AddFolderDTO;
+import com.micro.zuul.dto.document.Folder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @FeignClient(value = "user-server")
 public interface UserFeignService {
@@ -23,11 +26,14 @@ public interface UserFeignService {
     @PostMapping("/api/v1/user/register")
     ResponseUtils.Response<UserDto> register(@RequestBody UserRegisterDto dto);
 
-    @PostMapping("/api/v1/user/folder")
-    ResponseEntity<Object> addUserFolder(@RequestBody AddFolderDTO dto, @RequestParam String userId);
+    @PostMapping("/api/v1/user/{userId}/folder")
+    ResponseUtils.Response<Folder> addUserFolder(@RequestBody AddFolderDTO dto, @PathVariable String userId);
 
     @GetMapping("/api/v1/user/contact")
     ResponseUtils.Response<ContactDto> addContact(@RequestBody ContactDto dto, @RequestParam String userId);
+
+    @GetMapping("/api/v1/user/{userId}/folder")
+    ResponseUtils.Response<List<Folder>> getBasicFolderByUser(@PathVariable String userId);
 
 //
 //    @PostMapping("/api/v1/admin/register")

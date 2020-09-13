@@ -12,4 +12,5 @@ public interface MessageConstants {
     String USER_STATE = "user.state";
     String SAVED_SUCCESSFULLY = "saved.successfully";
     String SOMETHING_WENT_WRONG = "something.went.wrong";
+    String DATA_NOT_FOUND = "data.not.found";
 }

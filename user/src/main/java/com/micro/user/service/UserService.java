@@ -15,18 +15,16 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class UserService {
-
     @Autowired
     private EnvironmentVariables environmentVariables;
-
     @Autowired
     private UserRepoImpl userRepoImpl;
-
     @Autowired
     private BCryptPasswordEncoder encoder;
-
     @Autowired
     private LocaleService localeService;
+    @Autowired
+    private FolderService folderService;
 
     public User addUser(UserRegisterDto dto){
         User existingUser = userRepoImpl.findByPrimaryEmailId(dto.getEmail());
@@ -36,7 +34,9 @@ public class UserService {
         }
         dto.setPassword(encoder.encode(dto.getPassword()));
         User user = User.of(dto, User.Role.DIRECT_CLIENT);
-        return userRepoImpl.addUser(user);
+        user = userRepoImpl.addUser(user);
+        folderService.addBasicFolders(user);
+        return user;
     }
 
     public User login(LoginDto dto){
