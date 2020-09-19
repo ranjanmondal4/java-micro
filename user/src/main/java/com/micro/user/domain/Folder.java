@@ -40,20 +40,20 @@ public class Folder {
     @NonNull
     private Set<Document> documents;
 
-    public static Folder of(AddFolderDTO folderDTO, User user, Folder parentFolder, boolean deletable){
-        Folder folder = of(folderDTO.getName(), folderDTO.getDescription(), user, deletable);
+    public static Folder of(AddFolderDTO folderDTO, User user, Folder parentFolder, boolean deletable, boolean movable){
+        Folder folder = of(folderDTO.getName(), folderDTO.getDescription(), user, deletable, movable);
         folder.parentFolder = parentFolder;
         return folder;
     }
 
-    public static Folder of(String name, String description, User user, boolean deletable){
+    public static Folder of(String name, String description, User user, boolean deletable, boolean movable){
         Folder folder = new Folder();
         folder.name = name;
         folder.description = description;
         folder.user = user;
         folder.createdOn = LocalDate.now();
         folder.deletable = deletable;
-        folder.movable = false;
+        folder.movable = movable;
         folder.setDocuments(new HashSet<>(0));
         return folder;
     }

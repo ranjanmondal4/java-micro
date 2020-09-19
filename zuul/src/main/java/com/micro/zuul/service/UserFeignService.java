@@ -7,6 +7,7 @@ import com.micro.zuul.dto.UserDto;
 import com.micro.zuul.dto.UserRegisterDto;
 import com.micro.zuul.dto.document.AddFolderDTO;
 import com.micro.zuul.dto.document.Folder;
+import com.micro.zuul.dto.document.FolderDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public interface UserFeignService {
     @DeleteMapping("/api/v1/user/{userId}/folder/{folderId}/delete")
     ResponseUtils.Response<Folder> deleteFolder(@PathVariable String userId, @PathVariable String folderId);
 
+    @GetMapping("/api/v1/user/{userId}/folder/{folderId}")
+    ResponseUtils.Response<FolderDTO> getFolderByFolderId(@PathVariable String userId, @PathVariable String folderId);
 //
 //    @PostMapping("/api/v1/admin/register")
 //    User registerAdmin(@RequestBody UserRegisterDto dto);

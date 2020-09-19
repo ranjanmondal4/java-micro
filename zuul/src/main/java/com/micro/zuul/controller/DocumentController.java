@@ -46,4 +46,13 @@ public class DocumentController {
         RedisUserRole user = AppUtils.getLoggedInUser();
         return ResponseUtils.generate(userFeignService.deleteFolder(user.getUserId(), folderId));
     }
+
+    @ApiOperation("Get folder details")
+    @GetMapping("/folder/{folderId}")
+    public ResponseEntity<Object> getFolderByFolderId(@PathVariable String folderId){
+        RedisUserRole user = AppUtils.getLoggedInUser();
+        return ResponseUtils.generate(userFeignService.getFolderByFolderId(user.getUserId(), folderId));
+    }
+
+
 }

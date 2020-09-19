@@ -13,4 +13,7 @@ public interface MessageConstants {
     String SAVED_SUCCESSFULLY = "saved.successfully";
     String SOMETHING_WENT_WRONG = "something.went.wrong";
     String DATA_NOT_FOUND = "data.not.found";
+    String FOLDER_NOT_EMPTY = "folder.not.empty";
+    String OPERATION_NOT_ALLOWED = "operation.not.allowed";
+    String ALREADY_EXISTS = "already.exists";
 }

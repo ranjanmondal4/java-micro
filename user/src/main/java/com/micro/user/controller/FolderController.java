@@ -6,6 +6,7 @@ import com.micro.user.configuration.ResponseUtils;
 import com.micro.user.domain.Folder;
 import com.micro.user.domain.user.User;
 import com.micro.user.dto.folder.AddFolderDTO;
+import com.micro.user.dto.folder.FolderDTO;
 import com.micro.user.service.FolderService;
 import com.micro.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,11 @@ public class FolderController {
         return ResponseUtils.generateResponse(folderDeleted, folder, folderDeleted ?
                 localeService.getMessage(MessageConstants.SAVED_SUCCESSFULLY) : localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG));
 
+    }
+
+    @GetMapping("/{userId}/folder/{folderId}")
+    public ResponseUtils.Response<FolderDTO> getFolderByFolderId(@PathVariable String userId, @PathVariable String folderId) {
+        FolderDTO folderDTO = folderService.getAllContentsByFolderIdAndUserId(folderId, userId);
+        return ResponseUtils.generateResponse(true, folderDTO, localeService.getMessage(MessageConstants.DATA_FETCHED_SUCCESSFULLY));
     }
 }
