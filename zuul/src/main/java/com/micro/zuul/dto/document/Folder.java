@@ -12,7 +12,7 @@ public class Folder {
     private String name;
     private String description;
     private LocalDate createdOn;
-    private boolean deleted;
+    private boolean active;
     private Folder parentFolder;
     private boolean deletable;
     private boolean movable;

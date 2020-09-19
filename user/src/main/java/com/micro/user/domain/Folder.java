@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Document
@@ -24,36 +26,35 @@ public class Folder {
     private String description;
     @NonNull
     private LocalDate createdOn;
-    @NonNull
-    private boolean deleted;
     @Indexed
     @DBRef
     private User user;
     @Indexed
     @DBRef
     private Folder parentFolder;
+    private boolean active = true;
     @NonNull
     private boolean deletable;
     @NonNull
     private boolean movable;
-
+    @NonNull
     private Set<Document> documents;
 
-    public static Folder of(AddFolderDTO folderDTO, User user, Folder parentFolder){
-        Folder folder = of(folderDTO.getName(), folderDTO.getDescription(), user);
+    public static Folder of(AddFolderDTO folderDTO, User user, Folder parentFolder, boolean deletable){
+        Folder folder = of(folderDTO.getName(), folderDTO.getDescription(), user, deletable);
         folder.parentFolder = parentFolder;
         return folder;
     }
 
-    public static Folder of(String name, String description, User user){
+    public static Folder of(String name, String description, User user, boolean deletable){
         Folder folder = new Folder();
         folder.name = name;
         folder.description = description;
         folder.user = user;
         folder.createdOn = LocalDate.now();
-        folder.deleted = false;
-        folder.deletable = false;
+        folder.deletable = deletable;
         folder.movable = false;
+        folder.setDocuments(new HashSet<>(0));
         return folder;
     }
 }

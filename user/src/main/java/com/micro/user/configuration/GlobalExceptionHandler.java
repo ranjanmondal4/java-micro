@@ -15,22 +15,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseUtils.Response<? extends Object> methodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("Exception - {}", e.getMessage());
+        log.error("Exception - {}", e);
         return ResponseUtils.generateResponse(false, null,
-                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());
+                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.toString());
     }
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseUtils.Response<? extends Object> dataNotFoundException(final DataNotFoundException e) {
-        log.error("Exception - {}", e.getMessage());
+        log.error("Exception - {}", e);
         return ResponseUtils.generateResponse(false, null,
-                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());
+                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.toString());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseUtils.Response<? extends Object> exception(final Exception e) {
-        log.error("Exception {}", e.getMessage());
+        log.error("Exception - {}", e);
         return ResponseUtils.generateResponse(false, null,
-                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.getMessage());
+                localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG), e.toString());
     }
 }

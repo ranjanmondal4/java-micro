@@ -9,7 +9,6 @@ import com.micro.user.dto.folder.AddFolderDTO;
 import com.micro.user.service.FolderService;
 import com.micro.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,4 +41,22 @@ public class FolderController {
         return ResponseUtils.generateResponse(true, folders, localeService.getMessage(MessageConstants.DATA_FETCHED_SUCCESSFULLY));
     }
 
+    @PutMapping("/{userId}/folder/{folderId}/move")
+    public ResponseUtils.Response<Folder> moveFolder(@RequestParam String newParentFolderId, @PathVariable String userId,
+                                                     @PathVariable String folderId){
+        Folder folder = folderService.moveFolder(folderId, newParentFolderId, userId);
+        boolean folderMoved = !Objects.isNull(folder);
+        return ResponseUtils.generateResponse(folderMoved, folder, folderMoved ?
+                localeService.getMessage(MessageConstants.SAVED_SUCCESSFULLY) : localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG));
+
+    }
+
+    @DeleteMapping("/{userId}/folder/{folderId}/delete")
+    public ResponseUtils.Response<Folder> moveFolder(@PathVariable String userId, @PathVariable String folderId){
+        Folder folder = folderService.deleteFolderByFolderIdAndUserId(folderId, userId);
+        boolean folderDeleted = !Objects.isNull(folder);
+        return ResponseUtils.generateResponse(folderDeleted, folder, folderDeleted ?
+                localeService.getMessage(MessageConstants.SAVED_SUCCESSFULLY) : localeService.getMessage(MessageConstants.SOMETHING_WENT_WRONG));
+
+    }
 }

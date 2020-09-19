@@ -6,8 +6,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FolderRepo extends MongoRepository<Folder, String> {
-    List<Folder> findAllByUserAndParentFolderIsNull(User user);
+    List<Folder> findAllByUserAndParentFolderIsNullAndActiveTrue(User user);
+    Optional<Folder> findOneByFolderIdAndUser_IdAndActiveTrue(String folderId, String userId);
+
+    long countByParentFolder_FolderIdAndUser_IdAndActiveTrue(String parentFolderId, String userId);
 }

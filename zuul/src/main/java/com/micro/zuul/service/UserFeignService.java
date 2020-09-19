@@ -35,6 +35,13 @@ public interface UserFeignService {
     @GetMapping("/api/v1/user/{userId}/folder")
     ResponseUtils.Response<List<Folder>> getBasicFolderByUser(@PathVariable String userId);
 
+    @PutMapping("/api/v1/user/{userId}/folder/{folderId}/move")
+    ResponseUtils.Response<Folder> moveFolder(@PathVariable String userId, @PathVariable String folderId,
+                                              @RequestParam String newParentFolderId);
+
+    @DeleteMapping("/api/v1/user/{userId}/folder/{folderId}/delete")
+    ResponseUtils.Response<Folder> deleteFolder(@PathVariable String userId, @PathVariable String folderId);
+
 //
 //    @PostMapping("/api/v1/admin/register")
 //    User registerAdmin(@RequestBody UserRegisterDto dto);

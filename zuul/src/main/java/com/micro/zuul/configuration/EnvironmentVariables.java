@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Getter
 public class EnvironmentVariables {
-    public static final long tokenExpiry = 60*60;
+    public static final long tokenExpiry = 60*60*60;
 
     @Value("${app.jwt.secret.key}")
     private String jwtSecretKey;
